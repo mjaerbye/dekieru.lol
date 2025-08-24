@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>dekieru.lol</title>
+   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="img/fav.png" type="image/x-icon" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+      <!-- Red overlay for gradual background change -->
+    <div class="red-overlay" id="red-overlay"></div>
+    
+    <!-- Particle container -->
+    <div id="particles-container"></div>
+  
+  <div class="container">
+    <div class="draggable" id="draggable-window" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+      <div class="title-bar" id="drag-handle">
+        <span id="title-label">~ about_me.txt</span>
+        <div class="title-bar-buttons">
+          <div class="button" style="background-color: #a00;"></div>
+          <div class="button" style="background-color: #aa0;"></div>
+          <div class="button" style="background-color: #0a0;"></div>
+        </div>
+      </div>
+      <div class="window-body fade" id="window-content">
+        <!-- Content load dynamic -->
+      </div>
+    </div>
+  </div>
+  
+<!-- intro -->
+<div id="intro-overlay" style="
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease;
+  z-index: 9999;
+">
+  <p>click anywhere to enter</p>
+  <img src="https://count.getloli.com/@ui?name=ui&theme=original-old&padding=4" height="85">
+</div>
+
+
+<!-- bgm -->
+<audio id="bg-music" loop>
+  <source src="aud/bgm.m4a" type="audio/mpeg" />
+</audio>
+
+
+
+<!-- taskbar -->
+  <div class="taskbar">
+    <div class="taskbar-button active" data-tab="about">
+      <img src="img/about_me.jpg" alt="About icon" />
+      About Me
+    </div>
+    <div class="taskbar-button" data-tab="manga">
+      <img src="https://i.imgur.com/t2BoxRt.jpeg" alt="Manga icon" />
+      Coming soon
+    </div>
+    <div class="taskbar-button" data-tab="coming-soon-2">
+      <img src="https://i.imgur.com/t2BoxRt.jpeg" alt="Manga icon" />
+      Coming soon
+    </div>
+
+    <div class="taskbar-button" data-tab="123test" style="display: none;">
+      <img src="https://via.placeholder.com/32x32/ff6b6b/ffffff?text=123" alt="123test icon" />
+      123test
+    </div>
+    <div class="taskbar-button" data-tab="vn">
+      <img src="https://i.imgur.com/sui3NWs.jpeg" alt="VN icon" />
+      ???
+    </div>
+  </div>
+      <script type="module">
+        import { ghostCursor } from "https://unpkg.com/cursor-effects@latest/dist/esm.js";
+      
+        new ghostCursor();
+      </script>
+</body>
+</html>

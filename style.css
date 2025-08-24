@@ -1,0 +1,639 @@
+   @import url('https://fonts.googleapis.com/css2?family=MS+Gothic&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background-color: #000;
+      font-family: 'MS Gothic', monospace, Arial, sans-serif;
+      color: #eee;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      user-select: none;
+    background-image: url('img/picmix.com_1699659.gif');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    animation: none;
+    transition: background-color 2s ease;
+    }
+
+    /* Red overlay for gradual background change */
+    .red-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 0, 0, 0);
+      pointer-events: none;
+      z-index: -2;
+      transition: background-color 2s ease;
+    }
+
+    /* Button press animation */
+    @keyframes buttonPress {
+      0% {
+        transform: scale(1);
+        box-shadow: inset 0 1px 0 #444;
+      }
+      50% {
+        transform: scale(0.95);
+        box-shadow: inset 0 2px 4px #222;
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: inset 0 1px 0 #444;
+      }
+    }
+
+    .button-press {
+      animation: buttonPress 0.15s ease-in-out;
+    }
+
+    /* Particle container */
+    #particles-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      color: #ff0000;
+      font-family: 'MS Gothic', monospace;
+      font-size: 14px;
+      text-shadow: 0 0 5px #ff0000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* TASKBAR */
+    .taskbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #111;
+      border-top: 2px solid #333;
+      box-shadow: inset 0 2px 5px #555;
+      padding: 5px 10px;
+      display: flex;
+      gap: 8px;
+      z-index: 1000;
+    }
+
+    .taskbar-button {
+      background: #222;
+      border: 1px solid #555;
+      border-radius: 2px;
+      color: #ccc;
+      font-size: 14px;
+      padding: 5px 12px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+      box-shadow: inset 0 1px 0 #444;
+      user-select: none;
+      font-weight: bold;
+    }
+    .taskbar-button img {
+      width: 16px;
+      height: 16px;
+      margin-right: 6px;
+      filter: grayscale(100%) brightness(1.2);
+    }
+    .taskbar-button.active,
+    .taskbar-button:hover {
+      background: #555;
+      color: #fff;
+      box-shadow: none;
+    }
+
+    /* CONTAINER reserves space for taskbar */
+    .container {
+      position: relative;
+      /* width: 720px; */
+      height: calc(100vh - 40px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: text;
+    }
+
+    /* DRAGGABLE WINDOW */
+    .draggable {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      cursor: grab;
+      width: 1000px;
+      background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+      border: 2px solid #444;
+      border-radius: 6px;
+      box-shadow:
+        0 0 10px #111,
+        inset 0 0 5px #333;
+      user-select: none;
+      color: #ddd;
+      font-size: 15px;
+    }
+
+    .title-bar {
+      background: linear-gradient(to right, #222, #111);
+      padding: 6px 12px;
+      color: #eee;
+      font-weight: bold;
+      font-family: 'MS Gothic', monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #555;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .title-bar-buttons {
+      display: flex;
+      gap: 6px;
+    }
+
+    .button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #444;
+      border: 1px solid #222;
+      box-shadow:
+        inset 0 1px 1px #666,
+        0 1px 0 #111;
+      transition: background-color 0.2s ease;
+    }
+    .button:hover {
+      background-color: #777;
+    }
+
+    .window-body {
+      padding: 20px 25px;
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 20px;
+      color: #ddd;
+      font-family: 'MS Gothic', monospace;
+      user-select: text;
+    }
+
+    .left-column, .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .left-column img, .right-column img {
+      width: 100%;
+      border-radius: 4px;
+      border: 1px solid #444;
+      box-shadow: inset 0 0 4px #000;
+      object-fit: cover;
+    }
+
+    .middle-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .middle-column h2 {
+      margin-bottom: 12px;
+      color: #eee;
+      font-size: 20px;
+      text-shadow: 1px 1px 1px #000;
+    }
+
+    .middle-column h3 {
+      margin-bottom: 5px;
+      color: #eee;
+      font-size: 15px;
+      text-shadow: 1px 1px 1px #000;
+    }
+
+    .middle-column p {
+      margin-bottom: 10px;
+      font-size: 14px;
+      line-height: 1.3;
+      color: #ccc;
+      text-shadow: 1px 1px 1px #111;
+    }
+
+    /* Fade animation on content switch */
+    .fade {
+      animation: fadeSwitch 0.4s ease-in-out;
+    }
+    @keyframes fadeSwitch {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+.right-column img {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical centering */
+  align-items: center;     /* horizontal centering */
+  gap: 8px;
+  height: 100%; /* ensure it fills its grid cell */
+  border: none;
+  outline: none;
+}
+
+/* Glitch animation for 123test tab */
+.glitch-text {
+  animation: glitch 0.3s infinite;
+  position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.glitch-text::before {
+  animation: glitch-1 0.3s infinite;
+  color: #ff0000;
+  z-index: -1;
+}
+
+.glitch-text::after {
+  animation: glitch-2 0.3s infinite;
+  color: #00ffff;
+  z-index: -2;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes glitch-1 {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(2px, -2px);
+  }
+  40% {
+    transform: translate(-2px, 2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(-2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes glitch-2 {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(2px, -2px);
+  }
+  60% {
+    transform: translate(-2px, -2px);
+  }
+  80% {
+    transform: translate(2px, 2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes backgroundShake {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-1px, 1px);
+  }
+  50% {
+    transform: translate(1px, -1px);
+  }
+  75% {
+    transform: translate(-1px, -1px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes backgroundRupture {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    filter: hue-rotate(0deg) saturate(1) brightness(1) contrast(1);
+  }
+  8% {
+    transform: translate(-15px, -8px) scale(1.05) rotate(-2deg);
+    filter: hue-rotate(45deg) saturate(1.3) brightness(1.1) contrast(1.2);
+  }
+  16% {
+    transform: translate(12px, 15px) scale(0.92) rotate(3deg);
+    filter: hue-rotate(90deg) saturate(0.8) brightness(0.9) contrast(1.4);
+  }
+  24% {
+    transform: translate(-20px, 5px) scale(1.08) rotate(-1deg);
+    filter: hue-rotate(180deg) saturate(1.5) brightness(1.2) contrast(0.8);
+  }
+  32% {
+    transform: translate(18px, -12px) scale(0.88) rotate(4deg);
+    filter: hue-rotate(270deg) saturate(0.7) brightness(0.8) contrast(1.6);
+  }
+  40% {
+    transform: translate(-8px, 20px) scale(1.12) rotate(-3deg);
+    filter: hue-rotate(360deg) saturate(1.8) brightness(1.3) contrast(0.6);
+  }
+  48% {
+    transform: translate(25px, -5px) scale(0.85) rotate(5deg);
+    filter: hue-rotate(45deg) saturate(0.6) brightness(0.7) contrast(1.8);
+  }
+  56% {
+    transform: translate(-12px, -18px) scale(1.15) rotate(-4deg);
+    filter: hue-rotate(90deg) saturate(2.0) brightness(1.4) contrast(0.5);
+  }
+  64% {
+    transform: translate(20px, 10px) scale(0.82) rotate(6deg);
+    filter: hue-rotate(180deg) saturate(0.5) brightness(0.6) contrast(2.0);
+  }
+  72% {
+    transform: translate(-18px, 15px) scale(1.18) rotate(-5deg);
+    filter: hue-rotate(270deg) saturate(2.2) brightness(1.5) contrast(0.4);
+  }
+  80% {
+    transform: translate(15px, -20px) scale(0.78) rotate(7deg);
+    filter: hue-rotate(360deg) saturate(0.4) brightness(0.5) contrast(2.2);
+  }
+  88% {
+    transform: translate(-10px, -12px) scale(1.22) rotate(-6deg);
+    filter: hue-rotate(45deg) saturate(2.5) brightness(1.6) contrast(0.3);
+  }
+  96% {
+    transform: translate(8px, 8px) scale(0.75) rotate(8deg);
+    filter: hue-rotate(90deg) saturate(0.3) brightness(0.4) contrast(2.5);
+  }
+  100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    filter: hue-rotate(0deg) saturate(1) brightness(1) contrast(1);
+  }
+}
+
+@keyframes schizophrenicGlitch {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    filter: hue-rotate(0deg) saturate(1) brightness(1) contrast(1) blur(0px);
+  }
+  2% {
+    transform: translate(-30px, -20px) scale(1.3) rotate(-15deg);
+    filter: hue-rotate(120deg) saturate(3) brightness(2) contrast(3) blur(2px);
+  }
+  4% {
+    transform: translate(40px, 25px) scale(0.7) rotate(20deg);
+    filter: hue-rotate(240deg) saturate(0.2) brightness(0.3) contrast(4) blur(1px);
+  }
+  6% {
+    transform: translate(-25px, 35px) scale(1.4) rotate(-25deg);
+    filter: hue-rotate(360deg) saturate(4) brightness(2.5) contrast(0.1) blur(3px);
+  }
+  8% {
+    transform: translate(35px, -30px) scale(0.6) rotate(30deg);
+    filter: hue-rotate(180deg) saturate(0.1) brightness(0.2) contrast(5) blur(0px);
+  }
+  10% {
+    transform: translate(-40px, -15px) scale(1.5) rotate(-35deg);
+    filter: hue-rotate(90deg) saturate(5) brightness(3) contrast(0.05) blur(4px);
+  }
+  12% {
+    transform: translate(20px, 40px) scale(0.5) rotate(40deg);
+    filter: hue-rotate(300deg) saturate(0.05) brightness(0.1) contrast(6) blur(1px);
+  }
+  14% {
+    transform: translate(-35px, 20px) scale(1.6) rotate(-45deg);
+    filter: hue-rotate(60deg) saturate(6) brightness(3.5) contrast(0.02) blur(5px);
+  }
+  16% {
+    transform: translate(30px, -40px) scale(0.4) rotate(50deg);
+    filter: hue-rotate(150deg) saturate(0.02) brightness(0.05) contrast(7) blur(0px);
+  }
+  18% {
+    transform: translate(-20px, -25px) scale(1.7) rotate(-55deg);
+    filter: hue-rotate(30deg) saturate(7) brightness(4) contrast(0.01) blur(6px);
+  }
+  20% {
+    transform: translate(45px, 15px) scale(0.3) rotate(60deg);
+    filter: hue-rotate(210deg) saturate(0.01) brightness(0.02) contrast(8) blur(1px);
+  }
+  22% {
+    transform: translate(-15px, 45px) scale(1.8) rotate(-65deg);
+    filter: hue-rotate(330deg) saturate(8) brightness(4.5) contrast(0.005) blur(7px);
+  }
+  24% {
+    transform: translate(25px, -35px) scale(0.2) rotate(70deg);
+    filter: hue-rotate(270deg) saturate(0.005) brightness(0.01) contrast(9) blur(0px);
+  }
+  26% {
+    transform: translate(-50px, -10px) scale(1.9) rotate(-75deg);
+    filter: hue-rotate(120deg) saturate(9) brightness(5) contrast(0.001) blur(8px);
+  }
+  28% {
+    transform: translate(10px, 50px) scale(0.1) rotate(80deg);
+    filter: hue-rotate(180deg) saturate(0.001) brightness(0.005) contrast(10) blur(1px);
+  }
+  30% {
+    transform: translate(-45px, 30px) scale(2.0) rotate(-85deg);
+    filter: hue-rotate(60deg) saturate(10) brightness(5.5) contrast(0.0001) blur(9px);
+  }
+  32% {
+    transform: translate(40px, -20px) scale(0.05) rotate(90deg);
+    filter: hue-rotate(240deg) saturate(0.0001) brightness(0.001) contrast(11) blur(0px);
+  }
+  34% {
+    transform: translate(-30px, -40px) scale(2.1) rotate(-95deg);
+    filter: hue-rotate(300deg) saturate(11) brightness(6) contrast(0.00001) blur(10px);
+  }
+  36% {
+    transform: translate(15px, 35px) scale(0.02) rotate(100deg);
+    filter: hue-rotate(90deg) saturate(0.00001) brightness(0.0001) contrast(12) blur(1px);
+  }
+  38% {
+    transform: translate(-40px, 15px) scale(2.2) rotate(-105deg);
+    filter: hue-rotate(150deg) saturate(12) brightness(6.5) contrast(0.000001) blur(11px);
+  }
+  40% {
+    transform: translate(35px, -45px) scale(0.01) rotate(110deg);
+    filter: hue-rotate(210deg) saturate(0.000001) brightness(0.00001) contrast(13) blur(0px);
+  }
+  42% {
+    transform: translate(-25px, -30px) scale(2.3) rotate(-115deg);
+    filter: hue-rotate(330deg) saturate(13) brightness(7) contrast(0.0000001) blur(12px);
+  }
+  44% {
+    transform: translate(20px, 40px) scale(0.005) rotate(120deg);
+    filter: hue-rotate(60deg) saturate(0.0000001) brightness(0.000001) contrast(14) blur(1px);
+  }
+  46% {
+    transform: translate(-35px, 25px) scale(2.4) rotate(-125deg);
+    filter: hue-rotate(180deg) saturate(14) brightness(7.5) contrast(0.00000001) blur(13px);
+  }
+  48% {
+    transform: translate(30px, -35px) scale(0.001) rotate(130deg);
+    filter: hue-rotate(240deg) saturate(0.00000001) brightness(0.0000001) contrast(15) blur(0px);
+  }
+  50% {
+    transform: translate(-20px, -20px) scale(2.5) rotate(-135deg);
+    filter: hue-rotate(300deg) saturate(15) brightness(8) contrast(0.000000001) blur(14px);
+  }
+  52% {
+    transform: translate(25px, 30px) scale(0.0005) rotate(140deg);
+    filter: hue-rotate(90deg) saturate(0.000000001) brightness(0.00000001) contrast(16) blur(1px);
+  }
+  54% {
+    transform: translate(-30px, 35px) scale(2.6) rotate(-145deg);
+    filter: hue-rotate(150deg) saturate(16) brightness(8.5) contrast(0.0000000001) blur(15px);
+  }
+  56% {
+    transform: translate(15px, -40px) scale(0.0001) rotate(150deg);
+    filter: hue-rotate(210deg) saturate(0.0000000001) brightness(0.000000001) contrast(17) blur(0px);
+  }
+  58% {
+    transform: translate(-40px, -15px) scale(2.7) rotate(-155deg);
+    filter: hue-rotate(330deg) saturate(17) brightness(9) contrast(0.00000000001) blur(16px);
+  }
+  60% {
+    transform: translate(35px, 25px) scale(0.00005) rotate(160deg);
+    filter: hue-rotate(60deg) saturate(0.00000000001) brightness(0.0000000001) contrast(18) blur(1px);
+  }
+  62% {
+    transform: translate(-15px, -45px) scale(2.8) rotate(-165deg);
+    filter: hue-rotate(180deg) saturate(18) brightness(9.5) contrast(0.000000000001) blur(17px);
+  }
+  64% {
+    transform: translate(40px, 20px) scale(0.00001) rotate(170deg);
+    filter: hue-rotate(240deg) saturate(0.000000000001) brightness(0.00000000001) contrast(19) blur(0px);
+  }
+  66% {
+    transform: translate(-25px, 30px) scale(2.9) rotate(-175deg);
+    filter: hue-rotate(300deg) saturate(19) brightness(10) contrast(0.0000000000001) blur(18px);
+  }
+  68% {
+    transform: translate(20px, -35px) scale(0.000005) rotate(180deg);
+    filter: hue-rotate(90deg) saturate(0.0000000000001) brightness(0.000000000001) contrast(20) blur(1px);
+  }
+  70% {
+    transform: translate(-35px, -25px) scale(3.0) rotate(-185deg);
+    filter: hue-rotate(150deg) saturate(20) brightness(10.5) contrast(0.00000000000001) blur(19px);
+  }
+  72% {
+    transform: translate(30px, 40px) scale(0.000001) rotate(190deg);
+    filter: hue-rotate(210deg) saturate(0.00000000000001) brightness(0.0000000000001) contrast(21) blur(0px);
+  }
+  74% {
+    transform: translate(-20px, -30px) scale(3.1) rotate(-195deg);
+    filter: hue-rotate(330deg) saturate(21) brightness(11) contrast(0.000000000000001) blur(20px);
+  }
+  76% {
+    transform: translate(25px, -40px) scale(0.0000005) rotate(200deg);
+    filter: hue-rotate(60deg) saturate(0.000000000000001) brightness(0.00000000000001) contrast(22) blur(1px);
+  }
+  78% {
+    transform: translate(-30px, 35px) scale(3.2) rotate(-205deg);
+    filter: hue-rotate(180deg) saturate(22) brightness(11.5) contrast(0.0000000000000001) blur(21px);
+  }
+  80% {
+    transform: translate(15px, 30px) scale(0.0000001) rotate(210deg);
+    filter: hue-rotate(240deg) saturate(0.0000000000000001) brightness(0.000000000000001) contrast(23) blur(0px);
+  }
+  82% {
+    transform: translate(-40px, -20px) scale(3.3) rotate(-215deg);
+    filter: hue-rotate(300deg) saturate(23) brightness(12) contrast(0.00000000000000001) blur(22px);
+  }
+  84% {
+    transform: translate(35px, -25px) scale(0.00000005) rotate(220deg);
+    filter: hue-rotate(90deg) saturate(0.00000000000000001) brightness(0.0000000000000001) contrast(24) blur(1px);
+  }
+  86% {
+    transform: translate(-25px, 40px) scale(3.4) rotate(-225deg);
+    filter: hue-rotate(150deg) saturate(24) brightness(12.5) contrast(0.000000000000000001) blur(23px);
+  }
+  88% {
+    transform: translate(20px, 35px) scale(0.00000001) rotate(230deg);
+    filter: hue-rotate(210deg) saturate(0.000000000000000001) brightness(0.00000000000000001) contrast(25) blur(0px);
+  }
+  90% {
+    transform: translate(-35px, -15px) scale(3.5) rotate(-235deg);
+    filter: hue-rotate(330deg) saturate(25) brightness(13) contrast(0.0000000000000000001) blur(24px);
+  }
+  92% {
+    transform: translate(30px, -30px) scale(0.000000005) rotate(240deg);
+    filter: hue-rotate(60deg) saturate(0.0000000000000000001) brightness(0.000000000000000001) contrast(26) blur(1px);
+  }
+  94% {
+    transform: translate(-15px, 25px) scale(3.6) rotate(-245deg);
+    filter: hue-rotate(180deg) saturate(26) brightness(13.5) contrast(0.00000000000000000001) blur(25px);
+  }
+  96% {
+    transform: translate(40px, -35px) scale(0.000000001) rotate(250deg);
+    filter: hue-rotate(240deg) saturate(0.00000000000000000001) brightness(0.0000000000000000001) contrast(27) blur(0px);
+  }
+  98% {
+    transform: translate(-20px, -40px) scale(3.7) rotate(-255deg);
+    filter: hue-rotate(300deg) saturate(27) brightness(14) contrast(0.000000000000000000001) blur(26px);
+  }
+  100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    filter: hue-rotate(0deg) saturate(1) brightness(1) contrast(1) blur(0px);
+  }
+}
